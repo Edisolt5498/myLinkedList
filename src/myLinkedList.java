@@ -1,9 +1,9 @@
-import java.util.NoSuchElementException;
-public class myLinkedList<T> {
+import java.util.*;
+
+public class myLinkedList<T> implements List<T> {
     boolean nextIsNull = false;
     boolean prevIsNull = false;
     int count = 0;
-
     Point first = new Point(null, null, null);
     Point last = first;
     Point current = first;
@@ -11,21 +11,42 @@ public class myLinkedList<T> {
 
     public myLinkedList () {}
     ////////////////////////////////////////////ADDERS////////////////////////////////////////////
-    public void add (T value) {
-        if (count == 0) {
-            count++;
-            first.value = value;
-        } else if (count == 1) {
-            count++;
-            last = new Point(first, null, value);
-            first.changeNext(last);
-        } else {
-            count++;
-            temp = last;
-            last = new Point(temp, null, value);
-            temp.changeNext(last);
-        }
+
+    @Override
+    public boolean remove(Object o) {
+        return false;
     }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends T> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public void clear() {
+
+    }
+
     public void addFirst (T value) {
         temp = first;
         first = new Point(null, temp, value);
@@ -70,29 +91,138 @@ public class myLinkedList<T> {
         return returnedCurrent;
     }
     ////////////////////////////////////////////GETTERS////////////////////////////////////////////
-    public Point getFirst () {return first;}
-    public Point getLast () {return last;}
-    public Point get (int index) throws Exception {
+    public Point getFirst () {
+        return first;
+    }
+    public Point getLast () {
+        return last;
+    }
+
+    public Point getMy (int index) {
         int i = 0;
         Point forGet = this.current;
         while (i <= count) {
             if (i != index) {
                 forGet = forGet.next;
                 i++;
-            } else {return forGet;}
+            } else {
+                return forGet;
+            }
         }
         throw new NoSuchElementException();
     }
+
+    @Override
+    public T get (int index) {
+        return getMy(index).value;
+    }
+
+    @Override
+    public T set(int index, T element) {
+        T oldEl = getMy(index).value;
+        getMy(index).value = element;
+        return oldEl;
+    }
+    @Override
+    public boolean add(T t) {
+        if (count == 0) {
+            count++;
+            first.value = t;
+        } else if (count == 1) {
+            count++;
+            last = new Point(first, null, t);
+            first.changeNext(last);
+        } else {
+            count++;
+            temp = last;
+            last = new Point(temp, null, t);
+            temp.changeNext(last);
+        }
+        return true;
+    }
+    @Override
+    public void add(int index, T element) {
+        Point tempForAdd = new Point(getMy(index-1), getMy(index), element); //новый элемент списка с сслками
+        getMy(index-1).next = tempForAdd; // ссылка предыдущего элемента меняется на ссылку на новый элемент
+        getMy(index).prev = tempForAdd; // ссылка следующего элемента меняется на ссылку на предыдущий элемент
+    }
+    @Override
+    public T remove(int index) {
+        Point temp = getMy(index);
+        temp.next.prev = temp.prev;
+        temp.prev.next = temp.next;
+        return temp.value;
+    }
+
+    @Override
+    public int indexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public int lastIndexOf(Object o) {
+        return 0;
+    }
+
+    @Override
+    public ListIterator<T> listIterator() {
+        return null;
+    }
+
+    @Override
+    public ListIterator<T> listIterator(int index) {
+        return null;
+    }
+
+    @Override
+    public List<T> subList(int fromIndex, int toIndex) {
+        Point from = getMy(fromIndex);
+        Point to = getMy(toIndex);
+        Point currentWhile = from;
+        List<T> returnList = new ArrayList<>();
+        while (currentWhile != to.next) {
+            returnList.add(currentWhile.value);
+            currentWhile = currentWhile.next;
+        }
+        return returnList;
+    }
+
+    @Override
+    public int size() {
+        return count;
+    }
+
     ////////////////////////////////////////////IsEMPTY////////////////////////////////////////////
     public boolean isEmpty () {
         return this.count == 0;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return false;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T1> T1[] toArray(T1[] a) {
+        return null;
     }
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     private class Point {
-        Point prev, next;
+        Point prev;
+        Point next;
         T value;
         public Point (Point prev, Point next, T value) {
             this.prev = prev;
@@ -100,10 +230,20 @@ public class myLinkedList<T> {
             this.value = value;
         }
 
-        public void changeNext (Point newNext) {this.next = newNext;}
-        public void changePrev (Point newPrev) {this.prev = newPrev;}
+        public void changeNext (Point newNext) {
+            this.next = newNext;
+        }
+        public void changePrev (Point newPrev) {
+            this.prev = newPrev;
+        }
 
         @Override
-        public String toString () {return value.toString();}
+        public String toString () {
+            return value.toString();
+        }
     }
+    /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
+    /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
+    /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
+    /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
 }
