@@ -70,12 +70,8 @@ public class myLinkedList<T> {
         return returnedCurrent;
     }
     ////////////////////////////////////////////GETTERS////////////////////////////////////////////
-    public Point getFirst () {
-        return first;
-    }
-    public Point getLast () {
-        return last;
-    }
+    public Point getFirst () {return first;}
+    public Point getLast () {return last;}
     public Point get (int index) throws Exception {
         int i = 0;
         Point forGet = this.current;
@@ -83,9 +79,7 @@ public class myLinkedList<T> {
             if (i != index) {
                 forGet = forGet.next;
                 i++;
-            } else {
-                return forGet;
-            }
+            } else {return forGet;}
         }
         throw new NoSuchElementException();
     }
@@ -98,8 +92,7 @@ public class myLinkedList<T> {
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     private class Point {
-        Point prev;
-        Point next;
+        Point prev, next;
         T value;
         public Point (Point prev, Point next, T value) {
             this.prev = prev;
@@ -107,16 +100,10 @@ public class myLinkedList<T> {
             this.value = value;
         }
 
-        public void changeNext (Point newNext) {
-            this.next = newNext;
-        }
-        public void changePrev (Point newPrev) {
-            this.prev = newPrev;
-        }
+        public void changeNext (Point newNext) {this.next = newNext;}
+        public void changePrev (Point newPrev) {this.prev = newPrev;}
 
         @Override
-        public String toString () {
-            return value.toString();
-        }
+        public String toString () {return value.toString();}
     }
 }
