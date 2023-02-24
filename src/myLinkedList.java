@@ -4,6 +4,7 @@ public class myLinkedList<T> implements List<T> {
     boolean nextIsNull = false;
     boolean prevIsNull = false;
     int count = 0;
+    int currentPos;
     Point first = new Point(null, null, null);
     Point last = first;
     Point current = first;
@@ -73,6 +74,7 @@ public class myLinkedList<T> implements List<T> {
         Point returnedCurrent = current;
         if (current.next != null) {
             current = current.next;
+            currentPos++;
         } else {
             nextIsNull = true;
         }
@@ -85,6 +87,7 @@ public class myLinkedList<T> implements List<T> {
         Point returnedCurrent = current;
         if (current.prev != null) {
             current = current.prev;
+            currentPos--;
         } else {
             prevIsNull = true;
         }
@@ -127,6 +130,7 @@ public class myLinkedList<T> implements List<T> {
     public boolean add(T t) {
         if (count == 0) {
             count++;
+            currentPos = 1;
             first.value = t;
         } else if (count == 1) {
             count++;
@@ -166,12 +170,71 @@ public class myLinkedList<T> implements List<T> {
 
     @Override
     public ListIterator<T> listIterator() {
-        return null;
+        return new myListItr(current);
     }
 
     @Override
     public ListIterator<T> listIterator(int index) {
         return null;
+    }
+
+    private class myListItr implements ListIterator<T> {
+
+        private int itrCount;
+        private Point itrCurrent;
+        public myListItr(Point current) {
+            if (current == null) {
+                throw new IndexOutOfBoundsException();
+            }
+            this.itrCurrent = current;
+            this.itrCount = currentPos;
+        }
+        @Override
+        public boolean hasNext() {
+            return count >= itrCount++;
+        }
+
+        @Override
+        public T next() {
+            Point temp = itrCurrent;
+            itrCurrent = itrCurrent.next;
+            return temp.value;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return false;
+        }
+
+        @Override
+        public T previous() {
+            return null;
+        }
+
+        @Override
+        public int nextIndex() {
+            return 0;
+        }
+
+        @Override
+        public int previousIndex() {
+            return 0;
+        }
+
+        @Override
+        public void remove() {
+
+        }
+
+        @Override
+        public void set(Object o) {
+
+        }
+
+        @Override
+        public void add(Object o) {
+
+        }
     }
 
     @Override
@@ -216,6 +279,11 @@ public class myLinkedList<T> implements List<T> {
     public <T1> T1[] toArray(T1[] a) {
         return null;
     }
+    public void rebootIterator () {
+        nextIsNull = false;
+        prevIsNull = false;
+        current = first;
+    }
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
@@ -246,4 +314,17 @@ public class myLinkedList<T> implements List<T> {
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
     /////////////////////////////////////ELEMENT CLASS//////////////////////////////////////////////
+    @Override
+    public String toString () {
+        StringBuilder stringBuilder = new StringBuilder();
+        rebootIterator();
+        while (true) {
+            try {
+                stringBuilder.append(takeNext().toString());
+            } catch (Exception e) {
+                break;
+            }
+        }
+        return stringBuilder.toString();
+    }
 }
